@@ -15,5 +15,3 @@ addons:
     - cmake
     - libboost-all-dev
     - clang-4.0
-branches:
-  filelist
