@@ -12,19 +12,19 @@ default: build
 LAStools:
 	cd LAStools/LASzip && \
 	mkdir -p build && cd build && \
-	CC=$(CC) CXX=$(CXX) cmake -DCMAKE_BUILD_TYPE=Release .. && \
+	CC="$(CC)" CXX="$(CXX)" cmake -DCMAKE_BUILD_TYPE=Release .. && \
 	make -j$(nproc) && \
 	cd ../../LASlib/src && \
-	CC=$(CC) CXX=$(CXX)  make && \
+	CC="$(CC)" CXX="$(CXX)" make && \
 	cd ../../src && \
-	LIBS="-llaszip -L../LASzip/build/src" CC=$(CC) CXX=$(CXX) make
+	LIBS="-llaszip -L../LASzip/build/src" CC="$(CC)" CXX="$(CXX)" make
 
 .PHONY: build
 
 HERE=$(realpath ./)
 build: LAStools
 	mkdir -p build && cd build && \
-	CC=$(CC) CXX=$(CXX)  cmake .. \
+	CC="$(CC)" CXX="$(CXX)"  cmake .. \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DLASZIP_INCLUDE_DIRS=$(HERE)/LAStools/LASzip/dll \
 		-DLASZIP_LIBRARY_DIR=$(HERE)/LAStools/LASzip/build/src/ && \
