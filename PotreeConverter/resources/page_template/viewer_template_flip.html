@@ -36,10 +36,21 @@
       function potree_flipCloud(viewer) {
          var len = viewer.scene.pointclouds.length
          var index, cur, next;
+         cur = -1
          for (index = 0; index < len; ++index) {
             if (document.getElementById('scene_list_item_pointcloud_' + index).checked) {
-               cur = index;
+               if (cur < 0) {
+                  cur = index
+               } else { //unclick all remaining
+                  let x1 = document.getElementById('scene_list_item_pointcloud_' + cur)
+                  x1.click()
+               }
             }
+         }
+         if (cur<0) { // none is clicked
+            cur = len - 1
+            let x1 = document.getElementById('scene_list_item_pointcloud_' + cur)
+            x1.click()
          }
          next = (cur+1)%len;
          viewer.setDescription(viewer.scene.pointclouds[next].name)
