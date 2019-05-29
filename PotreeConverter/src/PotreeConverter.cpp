@@ -173,6 +173,7 @@ void PotreeConverter::generatePage(string name){
 
     Potree::copyDir(fs::path(templateDir), fs::path(pagedir));
 	fs::remove(pagedir + "/viewer_template.html");
+	fs::remove(pagedir + "/viewer_template_flip.html");
 	fs::remove(pagedir + "/lasmap_template.html");
 
 	if(!this->sourceListingOnly){ // change viewer template
