@@ -1,14 +1,15 @@
-Potree.v11.suo
-Potree.v12.suo
-Potree.sdf
-PotreeConverter/bin
-PotreeConverter/obj
-Potree.opensdf
-bin/
-obj
-build/*
-.idea
-*.orig
-test/converted
-*.o
-*.a
+# Taken from https://gist.github.com/chichunchen/970a7e97c74a253a4503
+
+# Ignore all
+*
+
+# Unignore all with extensions
+!*.*
+
+# Unignore all dirs
+!*/
+
+### Above combination will ignore all files without extension ###
+
+*.[a,o]
+build/
