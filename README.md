@@ -15,49 +15,15 @@ Builds a potree octree from las, laz, binary ply, xyz or ptx files.
 
 ## Build
 
-### linux / gcc 4.9
+### linux / gcc 4.9 and OS X
 
-
-lastools (from fork with cmake)
-
-```
-cd ~/dev/workspaces/lastools
-git clone https://github.com/m-schuetz/LAStools.git master
-cd master/LASzip
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make
-
-```
 
 PotreeConverter
 
 ```
-cd ~/dev/workspaces/PotreeConverter
-git clone https://github.com/potree/PotreeConverter.git master
-cd master
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DLASZIP_INCLUDE_DIRS=~/dev/workspaces/lastools/master/LASzip/dll -DLASZIP_LIBRARY=~/dev/workspaces/lastools/master/LASzip/build/src/liblaszip.so ..
 make
 
 # copy ./PotreeConverter/resources/page_template to your binary working directory.
-
-```
-
-### OS X
-
-Same as the linux instructions above, except:
-
-1. Give cmake absolute paths to the LASzip tools you just built. (Otherwise make might not be able to find them)
-2. LASZip library will be called `liblaszip.dylib`, not `liblaszip.so `
-
-```
-...
-
-cmake -DCMAKE_BUILD_TYPE=Release -DLASZIP_INCLUDE_DIRS=[ABSOLUTE_PATH_TO_LASTOOLS]/master/LASzip/dll -DLASZIP_LIBRARY=[ABSOLUTE_PATH_TO_LASTOOLS]/master/LASzip/build/src/liblaszip.dylib ..
-make
 
 ```
 
@@ -66,9 +32,7 @@ make
 lastools
 
 ```
-cd D:/dev/workspaces/lastools/
-git clone https://github.com/m-schuetz/LAStools.git master
-cd master/LASzip
+cd LAStools/LASzip
 mkdir build
 cd build
 cmake -G "Visual Studio 15 2017 Win64" ../
@@ -78,13 +42,11 @@ PotreeConverter
 
 ```
 # make sure you've got these environment variables set with your directory structure
-set LASZIP_INCLUDE_DIRS=D:\dev\workspaces\lastools\master\LASzip\dll
-set LASZIP_LIBRARY=D:\dev\workspaces\lastools\master\LASzip\build\src\Release\laszip.lib
+set LASZIP_INCLUDE_DIRS=D:\dev\workspaces\PotreeConverter\LAStools\LASzip\dll
+set LASZIP_LIBRARY=D:\dev\workspaces\PotreeConverter\LAStools\LASzip\build\src\Release\laszip.lib
 
-# checkout PotreeConverter
-cd D:/dev/workspaces/PotreeConverter
-git clone https://github.com/potree/PotreeConverter.git master
-cd master
+# compile PotreeConverter
+cd PotreeConverter
 mkdir build
 cd build
 
