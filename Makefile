@@ -8,21 +8,23 @@ default: build
 #	cp LAStools/LASlib/src/Makefile LAStools/LASlib/src/Makefile.old && \
 #	sed 's/COMPILER  = g++$$/COMPILER  = ${CXX}/g' < LAStools/LASlib/src/Makefile.old > LAStools/LASlib/src/Makefile
 
-.PHONY: LAStools
-LAStools:
+LASzip:
 	cd LAStools/LASzip && \
 	mkdir -p build && cd build && \
 	CC="$(CC)" CXX="$(CXX)" cmake -DCMAKE_BUILD_TYPE=Release .. && \
-	make -j$(nproc) && \
-	cd ../../LASlib/src && \
+	make -j$(nproc) 
+
+
+.PHONY: LAStools
+LAStools: LASzip
+	cd LAStools/LASlib/src && \
 	CC="$(CC)" CXX="$(CXX)" make && \
 	cd ../../src && \
 	LIBS="-llaszip -L../LASzip/build/src" CC="$(CC)" CXX="$(CXX)" make
 
-.PHONY: build
 
 HERE=$(realpath ./)
-build: LAStools
+PotreeConverter: LASzip
 	mkdir -p build && cd build && \
 	CC="$(CC)" CXX="$(CXX)"  cmake .. \
 		-DCMAKE_BUILD_TYPE=Release \
@@ -31,6 +33,9 @@ build: LAStools
 	make -j$(nproc)
 
 #		-DLASZIP_LIBRARY=$(HERE)/LAStools/LASzip/build/src/liblaszip.dylib && \
+
+.PHONY: build
+build: PotreeConverter LAStools
 
 .PHONY: clean
 clean:
