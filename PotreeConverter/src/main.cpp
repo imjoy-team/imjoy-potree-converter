@@ -221,6 +221,11 @@ PotreeArguments parseArguments(int argc, char **argv){
 		}
 	}
 
+	if (a.source.empty()) {
+		cerr << "No input files specified" << endl;
+		exit(1);
+	}
+
 	a.title = args.get("title").as<string>();
 	a.description = args.get("description").as<string>();
 	a.edlEnabled = args.has("edl-enabled");
