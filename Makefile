@@ -11,7 +11,8 @@ default: build
 LASzip:
 	cd LAStools/LASzip && \
 	mkdir -p build && cd build && \
-	CC="$(CC)" CXX="$(CXX)" cmake -DCMAKE_BUILD_TYPE=Release .. && \
+	CC="$(CC)" CXX="$(CXX)" cmake -DCMAKE_BUILD_TYPE=Release .. \
+		-DCMAKE_C_COMPILER="$(CC)" -DCMAKE_CXX_COMPILER="$(CXX)" && \
 	make -j$(nproc) 
 
 
@@ -27,6 +28,7 @@ HERE=$(realpath ./)
 PotreeConverter: LASzip
 	mkdir -p build && cd build && \
 	CC="$(CC)" CXX="$(CXX)"  cmake .. \
+		-DCMAKE_C_COMPILER="$(CC)" -DCMAKE_CXX_COMPILER="$(CXX)" \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DLASZIP_INCLUDE_DIRS=$(HERE)/LAStools/LASzip/dll \
 		-DLASZIP_LIBRARY_DIR=$(HERE)/LAStools/LASzip/build/src/ && \
