@@ -45,3 +45,16 @@ Compile the files:
 source ./emsdk/emsdk_env.sh
 emmake make PotreeConverter
 ```
+
+## Performance
+
+~1 minutes for 1 million points
+
+```js
+console.time('execution time')
+for(let i=0;i<10000;i++) 
+    pcModule.callMain(['./PotreeConverter', '-i', '/tmp/point-cloud.txt', '--overwrite']);
+console.timeEnd('execution time');
+
+// execution time: 57504 ms(for 10000*100 points)
+```
