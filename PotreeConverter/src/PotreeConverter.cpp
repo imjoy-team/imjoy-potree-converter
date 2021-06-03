@@ -350,7 +350,7 @@ void writeSources(string path, vector<string> sourceFilenames, vector<int> numPo
 }
 
 void reportProgress(std::string status, unsigned long index, unsigned long total){
-	cout << "Status: " + status + " \t" << index << "/" << total << endl;
+	cout << "Status: " + status + "\nProgress: " << index << "/" << total << endl;
 }
 
 void PotreeConverter::convert(){
@@ -414,7 +414,7 @@ void PotreeConverter::convert(){
 
 	for (const auto &source : sources) {
 		cout << "READING:  " << source << endl;
-		reportProgress("Reading " + source + "...", 0, -1);
+		reportProgress("Reading " + source + "...", 0, 0);
 
 		PointReader *reader = createPointReader(source, pointAttributes);
 

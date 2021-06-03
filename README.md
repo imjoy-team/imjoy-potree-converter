@@ -14,8 +14,10 @@ PotreeConverter compiled into WebAssembly
             pcModule.FS.writeFile('/tmp/point-cloud.txt', `0.000000000000000000e+00 0.000000000000000000e+00 0.000000000000000000e+00
 1.000000000000000000e+01 0.000000000000000000e+00 0.000000000000000000e+00`);
 
-            window.reportProgress = (status, progress, total)=>{
-                console.log('Progress:', status, progress, total);
+            window.stdout = function(data){
+                const p = document.createElement('p')
+                p.innerHTML = data
+                document.body.appendChild(p)
             }
             pcModule.callMain(['./PotreeConverter', '-i', '/tmp/point-cloud.txt', '--overwrite']);
         });
@@ -26,9 +28,8 @@ PotreeConverter compiled into WebAssembly
 </head>
 <body>
 
-<h1>My First Heading</h1>
+<h1>PotreeConverter</h1>
 
-<p>My first paragraph.</p>
 
 </body>
 </html>
@@ -39,6 +40,8 @@ PotreeConverter compiled into WebAssembly
 ## Development
 Compile the files:
 ```
+./emsdk install 2.0.23
+./emsdk activate 2.0.23
 source ./emsdk/emsdk_env.sh
 emmake make PotreeConverter
 ```
