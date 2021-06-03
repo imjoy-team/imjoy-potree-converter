@@ -35,6 +35,7 @@ PotreeConverter: LASzip
 		-DLASZIP_LIBRARY_DIR=$(HERE)/LAStools/LASzip/build/src/ && \
 	make -j$(nproc) && \
 	cp PotreeConverter/PotreeConverter PotreeConverter/PotreeConverter.js
+	cp $(HERE)/PotreeConverter/index.html $(HERE)/build/PotreeConverter/index.html
 
 #		-DLASZIP_LIBRARY=$(HERE)/LAStools/LASzip/build/src/liblaszip.dylib && \
 

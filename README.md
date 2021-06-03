@@ -2,7 +2,6 @@
 
 PotreeConverter compiled into WebAssembly
 
-
 ## Usage
 ```html
 <!DOCTYPE html>
@@ -34,4 +33,12 @@ PotreeConverter compiled into WebAssembly
 </body>
 </html>
 
+```
+
+
+## Development
+Compile the files:
+```
+source ./emsdk/emsdk_env.sh
+emmake make PotreeConverter
 ```
