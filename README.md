@@ -39,6 +39,7 @@ PotreeConverter compiled into WebAssembly
 ## Development
 Compile the files:
 ```
+./emsdk install 1.38.43
 source ./emsdk/emsdk_env.sh
 emmake make PotreeConverter
 ```
