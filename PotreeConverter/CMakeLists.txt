@@ -39,7 +39,7 @@ add_executable(PotreeConverter ${files} ${lib_rapidjson_files} ${lib_argument_fi
 target_link_libraries(PotreeConverter laszip )
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++20 -lstdc++ -lm") #  -pthread 
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++20 -pthread -s PTHREAD_POOL_SIZE=10 -lstdc++ -lm") 
     # target_link_libraries(PotreeConverter -lstdc++fs)
 endif()
 

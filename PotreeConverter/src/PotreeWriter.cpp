@@ -513,9 +513,9 @@ string PotreeWriter::getExtension(){
 }
 
 void PotreeWriter::waitUntilProcessed(){
-	// if(storeThread.joinable()){
-	// 	storeThread.join();
-	// }
+	if(storeThread.joinable()){
+		storeThread.join();
+	}
 }
 
 void PotreeWriter::add(Point &p){
@@ -541,7 +541,7 @@ void PotreeWriter::processStore(){
 
 	waitUntilProcessed();
 
-	// storeThread = thread([this, st]{
+	storeThread = thread([this, st]{
 		for(Point p : st){
 			PWNode *acceptedBy = root->add(p);
 			if(acceptedBy != NULL){
@@ -551,24 +551,24 @@ void PotreeWriter::processStore(){
 				numAccepted++;
 			}
 		}
-	// });
+	});
 }
 
 void PotreeWriter::flush(){
 	processStore();
 
-	// if(storeThread.joinable()){
-	// 	storeThread.join();
-	// }
+	if(storeThread.joinable()){
+		storeThread.join();
+	}
 
-	//auto start = high_resolution_clock::now();
+	auto start = high_resolution_clock::now();
 
 	root->flush();
 
-	//auto end = high_resolution_clock::now();
-	//long long duration = duration_cast<milliseconds>(end-start).count();
-	//float seconds = duration / 1'000.0f;
-	//cout << "flush nodes: " << seconds << "s" << endl;
+	auto end = high_resolution_clock::now();
+	long long duration = duration_cast<milliseconds>(end-start).count();
+	float seconds = duration / 1'000.0f;
+	cout << "flush nodes: " << seconds << "s" << endl;
 
 	{// update cloud.js
 		cloudjs.hierarchy = vector<CloudJS::Node>();
@@ -585,7 +585,7 @@ void PotreeWriter::flush(){
 
 
 	{// write hierarchy
-		//auto start = high_resolution_clock::now();
+		auto start = high_resolution_clock::now();
 
 		int hrcTotal = 0;
 		int hrcFlushed = 0;
@@ -635,12 +635,12 @@ void PotreeWriter::flush(){
 			node->addedSinceLastFlush = false;
 		});
 
-		//cout << "hrcTotal: " << hrcTotal << "; " << "hrcFlushed: " << hrcFlushed << endl;
+		cout << "hrcTotal: " << hrcTotal << "; " << "hrcFlushed: " << hrcFlushed << endl;
 
-		//auto end = high_resolution_clock::now();
-		//long long duration = duration_cast<milliseconds>(end-start).count();
-		//float seconds = duration / 1'000.0f;
-		//cout << "writing hierarchy: " << seconds << "s" << endl;
+		auto end = high_resolution_clock::now();
+		long long duration = duration_cast<milliseconds>(end-start).count();
+		float seconds = duration / 1'000.0f;
+		cout << "writing hierarchy: " << seconds << "s" << endl;
 
 	}
 }
