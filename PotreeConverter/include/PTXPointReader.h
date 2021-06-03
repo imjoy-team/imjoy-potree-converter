@@ -3,6 +3,8 @@
 
 #include <map>
 #include "PointReader.h"
+#include <string>
+#include <vector>
 
 using std::string;
 using std::fstream;

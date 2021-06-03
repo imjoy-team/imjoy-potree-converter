@@ -513,9 +513,9 @@ string PotreeWriter::getExtension(){
 }
 
 void PotreeWriter::waitUntilProcessed(){
-	if(storeThread.joinable()){
-		storeThread.join();
-	}
+	// if(storeThread.joinable()){
+	// 	storeThread.join();
+	// }
 }
 
 void PotreeWriter::add(Point &p){
@@ -541,7 +541,7 @@ void PotreeWriter::processStore(){
 
 	waitUntilProcessed();
 
-	storeThread = thread([this, st]{
+	// storeThread = thread([this, st]{
 		for(Point p : st){
 			PWNode *acceptedBy = root->add(p);
 			if(acceptedBy != NULL){
@@ -551,15 +551,15 @@ void PotreeWriter::processStore(){
 				numAccepted++;
 			}
 		}
-	});
+	// });
 }
 
 void PotreeWriter::flush(){
 	processStore();
 
-	if(storeThread.joinable()){
-		storeThread.join();
-	}
+	// if(storeThread.joinable()){
+	// 	storeThread.join();
+	// }
 
 	//auto start = high_resolution_clock::now();
 

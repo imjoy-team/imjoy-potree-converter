@@ -13,6 +13,7 @@
 #include "arguments.hpp"
 #include <experimental/filesystem>
 
+
 namespace fs = std::experimental::filesystem;
 
 using std::string;
@@ -251,7 +252,7 @@ PotreeArguments parseArguments(int argc, char **argv){
 	}
 
    try {
-    auto absolutePath = fs::canonical(fs::system_complete(argv[0]));
+    auto absolutePath = fs::absolute(argv[0]); //fs::canonical(fs::system_complete(argv[0]));
     a.executablePath = absolutePath.parent_path().string();
    } catch (const fs::filesystem_error &e) {
      // do nothing
@@ -291,7 +292,7 @@ void printArguments(PotreeArguments &a){
 
 int main(int argc, char **argv){
 	cout.imbue(std::locale(""));
-	
+
 	try{
 		PotreeArguments a = parseArguments(argc, argv);
 		printArguments(a);
@@ -321,8 +322,8 @@ int main(int argc, char **argv){
 		pc.showSkybox = a.showSkybox;
 		pc.storeSize = a.storeSize;
 		pc.flushLimit = a.flushLimit;
-
 		pc.convert();
+
 	}catch(exception &e){
 		cout << "ERROR: " << e.what() << endl;
 		return 1;

@@ -13,7 +13,8 @@ LASzip:
 	mkdir -p build && cd build && \
 	CC="$(CC)" CXX="$(CXX)" cmake -DCMAKE_BUILD_TYPE=Release .. \
 		-DCMAKE_C_COMPILER="$(CC)" -DCMAKE_CXX_COMPILER="$(CXX)" && \
-	make -j$(nproc) 
+	make -j$(nproc) && \
+	emranlib src/liblaszip.a
 
 
 .PHONY: LAStools
@@ -27,12 +28,13 @@ LAStools: LASzip
 HERE=$(realpath ./)
 PotreeConverter: LASzip
 	mkdir -p build && cd build && \
-	CC="$(CC)" CXX="$(CXX)"  cmake .. \
+	CC="$(CC)" CXX="$(CXX)" cmake .. \
 		-DCMAKE_C_COMPILER="$(CC)" -DCMAKE_CXX_COMPILER="$(CXX)" \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DLASZIP_INCLUDE_DIRS=$(HERE)/LAStools/LASzip/dll \
 		-DLASZIP_LIBRARY_DIR=$(HERE)/LAStools/LASzip/build/src/ && \
-	make -j$(nproc)
+	make -j$(nproc) && \
+	cp PotreeConverter/PotreeConverter PotreeConverter/PotreeConverter.js
 
 #		-DLASZIP_LIBRARY=$(HERE)/LAStools/LASzip/build/src/liblaszip.dylib && \
 

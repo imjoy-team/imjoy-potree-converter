@@ -111,7 +111,7 @@ public:
 	PointAttributes pointAttributes;
 	int hierarchyStepSize = 5;
 	vector<Point> store;
-	thread storeThread;
+	// thread storeThread;
 	int pointsInMemory = 0;
 	string projection = "";
 	ConversionQuality quality = ConversionQuality::DEFAULT;

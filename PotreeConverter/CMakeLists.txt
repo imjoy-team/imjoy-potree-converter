@@ -39,8 +39,8 @@ add_executable(PotreeConverter ${files} ${lib_rapidjson_files} ${lib_argument_fi
 target_link_libraries(PotreeConverter laszip )
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
-    target_link_libraries(PotreeConverter -lstdc++fs)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++20 -pthread -lstdc++ -lm")
+    # target_link_libraries(PotreeConverter -lstdc++fs)
 endif()
 
 install(TARGETS PotreeConverter RUNTIME DESTINATION bin/ )

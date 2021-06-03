@@ -25,7 +25,7 @@
 #include <vector>
 #include <math.h>
 #include <fstream>
-
+#include <emscripten.h>
 
 
 
@@ -350,7 +350,14 @@ void writeSources(string path, vector<string> sourceFilenames, vector<int> numPo
 	sourcesOut.close();
 }
 
+EM_JS(void, reportProgress, (const char *status, int lenstatus, unsigned long index, unsigned long total), {
+if(window.reportProgress)
+	window.reportProgress(UTF8ToString(status, lenstatus), index, total);
+});
+
 void PotreeConverter::convert(){
+
+
 	auto start = high_resolution_clock::now();
 
 	prepare();
@@ -409,12 +416,16 @@ void PotreeConverter::convert(){
 
 	for (const auto &source : sources) {
 		cout << "READING:  " << source << endl;
+		std::string str = "Reading " + source + "...";
+		reportProgress(str.c_str(), str.length(), 0, -1);
 
 		PointReader *reader = createPointReader(source, pointAttributes);
 
 		boundingBoxes.push_back(reader->getAABB());
 		numPoints.push_back(reader->numPoints());
 		sourceFilenames.push_back(fs::path(source).filename().string());
+		long long totalPoints = reader->numPoints();
+		long long pointIndex = 0;
 
 		writeSources(this->workDir, sourceFilenames, numPoints, boundingBoxes, this->projection);
 		if(this->sourceListingOnly){
@@ -424,13 +435,18 @@ void PotreeConverter::convert(){
 			continue;
 		}
 
+		str = "Converting...";
+		reportProgress(str.c_str(), str.length(), 0, totalPoints);
 		while(reader->readNextPoint()){
 			pointsProcessed++;
-
+			pointIndex++;
+			
 			Point p = reader->getPoint();
 			writer->add(p);
 
-			if((pointsProcessed % (1'000'000)) == 0){
+			if((pointsProcessed % (100'000)) == 0){
+				str = "Processing...";
+				reportProgress(str.c_str(), str.length(), pointIndex, totalPoints);
 				writer->processStore();
 				writer->waitUntilProcessed();
 
@@ -468,8 +484,8 @@ void PotreeConverter::convert(){
 		}
 		reader->close();
 		delete reader;
-
-		
+		str = "Done!";
+		reportProgress(str.c_str(), str.length(), totalPoints, totalPoints);
 	}
 	
 	cout << "closing writer" << endl;
