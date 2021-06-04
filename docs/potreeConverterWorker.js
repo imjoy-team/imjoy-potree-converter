@@ -2,15 +2,15 @@ import Module from "./PotreeConverter.js";
 
 function mountFiles(FS, files) {
     try {
-        FS.mkdir('/dataReadOnly');
+        FS.mkdir('/files');
     }
     catch (e) {
-        console.log('Unmount existing /dataReadOnly')
-        FS.unmount('/dataReadOnly');
+        console.log('Unmount existing /files')
+        FS.unmount('/files');
     }
     FS.mount(FS.filesystems.WORKERFS, {
         blobs: files
-    }, '/dataReadOnly');
+    }, '/files');
 }
 
 new Module().then(pcModule => {

@@ -26,7 +26,7 @@ function stopRunning() {
 
 function retrieveSampleData() {
     var oReq = new XMLHttpRequest();
-    oReq.open("GET", "./ripple.txt", true);
+    oReq.open("GET", "./input.txt", true);
     oReq.responseType = "arraybuffer";
 
     oReq.onload = function (oEvent) {
