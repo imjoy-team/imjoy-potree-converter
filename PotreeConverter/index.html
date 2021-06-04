@@ -2,7 +2,7 @@
 <html>
 <head>
     <script type="module">
-        import Module from "http://localhost:8000/build/PotreeConverter/PotreeConverter.js";
+        import Module from "./PotreeConverter.js";
         new Module().then(pcModule => {
             pcModule.FS.writeFile('/tmp/point-cloud.txt', `0.000000000000000000e+00 0.000000000000000000e+00 0.000000000000000000e+00
 1.000000000000000000e+01 0.000000000000000000e+00 0.000000000000000000e+00

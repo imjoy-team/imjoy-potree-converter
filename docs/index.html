@@ -1,105 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>Potree Viewer</title>
 
-	<link rel="stylesheet" type="text/css" href="./libs/potree/potree.css">
-	<link rel="stylesheet" type="text/css" href="./libs/jquery-ui/jquery-ui.min.css">
-	<link rel="stylesheet" type="text/css" href="./libs/perfect-scrollbar/css/perfect-scrollbar.css">
-	<link rel="stylesheet" type="text/css" href="./libs/openlayers3/ol.css">
-	<link rel="stylesheet" type="text/css" href="./libs/spectrum/spectrum.css">
-	<link rel="stylesheet" type="text/css" href="./libs/jstree/themes/mixed/style.css">
+<head>
+  <meta charset="utf-8">
+  <title>imjoy-potree-converter - Potree Point Cloud Converter In Your Web Browser</title>
+  <meta name="description" content="Potree Converter">
+  <meta name="author" content="Wei OUYANG">
+  <link href="/site.css" rel="stylesheet">
+  <style type="text/css">
+    #terminal {
+      background: #fff;
+      color: #000;
+      font-family: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+      font-weight: lighter;
+      border: solid 1px;
+      padding: 10px;
+      margin-top: 35px;
+    }
+
+    .terminal-top-bar {
+      background: rgb(233, 233, 233);
+      height: 14px;
+      font-size: 12px;
+      line-height: 14px;
+      margin-top: -30px;
+      margin-left: -11px;
+      margin-right: -11px;
+      padding: 3px;
+      text-align: center;
+      color: rgb(92, 92, 92);
+      border: solid 1px;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .terminal-header {
+      padding-top: 15px;
+    }
+
+    #input {
+      width: 80%;
+      padding: 4px;
+    }
+
+    #run {
+      width: 15%
+    }
+
+    #output {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    #output.closed {
+      max-height: 200px;
+      overflow-y: scroll;
+    }
+
+    #files {
+      text-align: center;
+    }
+
+    #files img {
+      max-width: 80%;
+    }
+
+    .sample-commands {
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-	<script src="./libs/jquery/jquery-3.1.1.min.js"></script>
-	<script src="./libs/spectrum/spectrum.js"></script>
-	<script src="./libs/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
-	<script src="./libs/jquery-ui/jquery-ui.min.js"></script>
-	<script src="./libs/three.js/build/three.min.js"></script>
-	<script src="./libs/other/BinaryHeap.js"></script>
-	<script src="./libs/tween/tween.min.js"></script>
-	<script src="./libs/d3/d3.js"></script>
-	<script src="./libs/proj4/proj4.js"></script>
-	<script src="./libs/openlayers3/ol.js"></script>
-	<script src="./libs/i18next/i18next.js"></script>
-	<script src="./libs/jstree/jstree.js"></script>
-	<script src="./libs/potree/potree.js"></script>
-	<script src="./libs/plasio/js/laslaz.js"></script>
-    <script src="https://lib.imjoy.io/imjoy-loader.js"></script>
-    
-	
-	<!-- INCLUDE ADDITIONAL DEPENDENCIES HERE -->
-	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
-		<div id="potree_render_area"></div>
-		<div id="potree_sidebar_container"> </div>
-	</div>
-	
-	<script>
-	
-		function initViewer(){
-            const viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
-            viewer.setEDLEnabled(true);
-            viewer.setFOV(60);
-            viewer.setPointBudget(1*1000*1000);
-            document.title = "";
-            viewer.setEDLEnabled(true);
-            viewer.setBackground("gradient"); // ["skybox", "gradient", "black", "white"];
-            viewer.setDescription(``);
-            viewer.loadSettingsFromURL();
-            
-            viewer.loadGUI(() => {
-                viewer.setLanguage('en');
-                // $("#menu_appearance").next().show();
-                // $("#menu_tools").next().show();
-                // $("#menu_scene").next().show();
-                // viewer.toggleSidebar();
-            });
-            return viewer
-        }
-        // check if it's inside an iframe
-        if(window.self !== window.top){
-            loadImJoyRPC().then(async (imjoyRPC)=>{
-                const api = await imjoyRPC.setupRPC({name: 'My Awesome App'});
-                function setup(){
-                    api.alert('ImJoy RPC initialized.')
-                    this.viewer = initViewer();
-                }
-                // define your api which can be called by other plugins in ImJoy
-                function loadPointCloud({url, name}){
-                    Potree.loadPointCloud(url, name, e => {
-                        let pointcloud = e.pointcloud;
-                        let material = pointcloud.material;
-                        this.viewer.scene.addPointCloud(pointcloud);
-                        material.pointColorType = Potree.PointColorType.ELEVATION; // any Potree.PointColorType.XXXX 
-                        material.size = 1;
-                        material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-                        material.shape = Potree.PointShape.SQUARE;
-                        this.viewer.fitToScreen();
-                    });
-                }
-                api.export({'setup': setup, 'loadPointCloud': loadPointCloud});
-            })
-        }
-        else{
-            const viewer = initViewer()
-            Potree.loadPointCloud("https://potree.org/potree/pointclouds/vol_total/cloud.js", "sigeom.sa", e => {
-                let pointcloud = e.pointcloud;
-                let material = pointcloud.material;
-                this.viewer.scene.addPointCloud(pointcloud);
-                material.pointColorType = Potree.PointColorType.ELEVATION; // any Potree.PointColorType.XXXX 
-                material.size = 1;
-                material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-                material.shape = Potree.PointShape.SQUARE;
-                this.viewer.fitToScreen();
-            });
-        }          
-	</script>
-	
-	
-  </body>
+
+  <div class="container-fluid">
+    <div class='content'>
+      <div class='inner-content'>
+        <div class="header clearfix">
+          <div class="pull-left">
+            <H1><a href='../'><img src='https://imjoy.io/static/img/imjoy-icon.png' width="30" /><span>ImJoy Potree
+                  Converter</span></a>
+            </H1>
+          </div>
+          <div class="pull-right links">
+            <a href='./viewer.html'>Potree Viewer</a>
+            <a href='http://github.com/imjoy-team/imjoy-potree-converter'>source code on github</a>
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <h2>Terminal Demo</h2>
+          <p>
+            Imagine that you have installed FFmpeg on your computer. Also imagine that you have files called <a
+              href="bigbuckbunny.webm">input.webm</a> and <a href="bigbuckbunny.jpg">input.jpeg</a> in the current
+            directory. Feel free to run whatever commands you want, or <strong>try the sample commands below:</strong>
+          </p>
+
+          <div class="sample-commands">
+            <button class="plain-button sample" data-command="-help">Help</button>
+            <button class="plain-button sample"
+              data-command="-i /dataReadOnly/input.txt --overwrite -o /tmp/output">Sample Data</button>
+          </div>
+          <div id="terminal">
+            <div class="terminal-top-bar">
+              imjoy-potree-converter
+            </div>
+            <div class="terminal-header">
+              <input id="input" value="--help" />
+              <button id="run" class="plain-button">Run Command</button>
+              <img id="image-loader" src="./load.gif" />
+            </div>
+            <pre id="output">Loading JavaScript files (it may take a minute)</pre>
+          </div>
+          <div id="files">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type='text/javascript' src='terminal.js'></script>
+</body>
+
 </html>
