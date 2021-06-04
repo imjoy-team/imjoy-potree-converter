@@ -84,11 +84,12 @@ function getDownloadLink(fileData, fileName) {
     }
     else {
         var a = document.createElement('a');
+        a.style.margin = "3px";
         a.download = fileName;
         var blob = new Blob([fileData]);
         var src = window.URL.createObjectURL(blob);
         a.href = src;
-        a.textContent = 'Click here to download ' + fileName + "!";
+        a.textContent = fileName;
         return a;
     }
 }

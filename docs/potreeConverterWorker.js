@@ -45,16 +45,34 @@ new Module().then(pcModule => {
             });
 
             var time = now();
-            var result = pcModule.callMain(['./PotreeConverter'].concat(config.arguments));
+            pcModule.callMain(['./PotreeConverter'].concat(config.arguments));
             var totalTime = now() - time;
             postMessage({
                 'type': 'stdout',
                 'data': 'Finished processing (took ' + totalTime + 'ms)'
             });
+            let buffers;
+            if (FS.analyzePath('/tmp/output').exists) {
+                const outputs = FS.readdir('/tmp/output').filter((name) => {
+                    if (name.startsWith('.')) return false
+                    const path = '/tmp/output/' + name;
+                    const stat = FS.stat(path)
+                    const isDir = FS.isDir(stat.mode);
+                    console.log((isDir ? "file: " : "Dir:") + name, " size:" + stat.size)
+                    if (isDir) console.log(FS.readdir(path));
+                    return !isDir
+                })
+                console.log("ouput files: ", outputs)
+                buffers = outputs.map((name) => {
+                    const path = '/tmp/output/' + name;
+                    const stat = FS.stat(path)
+                    return { name, data: FS.readFile(path, { encoding: 'binary' }), size: stat.size }
+                })
+            }
 
             postMessage({
                 'type': 'done',
-                'data': result,
+                'data': buffers,
                 'time': totalTime
             });
         }
